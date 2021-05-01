@@ -1,0 +1,70 @@
+{% extends 'base.html' %}
+{% block content %}
+<section id="team" class="team">
+      <div class="container">
+
+        <div class="section-title">
+          <h2>世界大学排名系统</h2>
+        </div>
+          <div style="height: 70px;position: relative">
+          <div style="position: absolute;right: 20px">
+          <form action="">
+              <div class="form-group">
+                  <label>
+                      <input type="text" class="form-control"  placeholder="请输入学校名称">
+                  </label>
+                  <input type="submit" style="height: 38px" class="btn btn-primary" value="搜索">
+             </div>
+          </form>
+              </div>
+          </div>
+        <!-- ======= Counts Section ======= -->
+    <section class="counts section-bg">
+      <div class="container">
+
+        <div class="row">
+
+          <div class="col-lg-3 col-md-6 text-center" data-aos="fade-up">
+              <a href="{{ url_for('qs_rank') }}">
+            <div class="count-box">
+                <img style="height: 80px" src="{{ url_for('static',filename='images/qs2.jpg') }}" alt="">
+              <p>QS世界大学排名</p>
+            </div>
+              </a>
+          </div>
+
+          <div class="col-lg-3 col-md-6 text-center" data-aos="fade-up" data-aos-delay="200">
+           <a href="{{ url_for('the_rank') }}">
+            <div class="count-box">
+              <img style="height: 80px" src="{{ url_for('static',filename='images/taiwushi.png') }}" alt="">
+              <p>泰晤士高等教育世界大学排名</p>
+            </div>
+              </a>
+          </div>
+
+          <div class="col-lg-3 col-md-6 text-center" data-aos="fade-up" data-aos-delay="400">
+             <a href="{{ url_for('us_news_rank') }}">
+                <div class="count-box">
+            <img style="height: 80px" src="{{ url_for('static',filename='images/us_news.jpg') }}" alt="">
+                 <p>US.News世界大学排名</p>
+                </div>
+             </a>
+          </div>
+
+          <div class="col-lg-3 col-md-6 text-center" data-aos="fade-up" data-aos-delay="600">
+            <a href="{{ url_for('arwu_rank') }}">
+            <div class="count-box">
+     <img style="height: 78px" src="{{ url_for('static',filename='images/arwu.jpg') }}" alt="">
+              <p>ARWU软科世界大学学术排名</p>
+            </div>
+            </a>
+          </div>
+
+        </div>
+
+      </div>
+    </section><!-- End Counts Section -->
+
+      </div>
+    </section>
+{% endblock %}

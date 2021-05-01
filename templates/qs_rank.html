@@ -1,0 +1,91 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<section id="team" class="team">
+      <div class="container">
+
+        <div class="section-title">
+          <h2>QS世界大学排名</h2>
+        </div>
+          <div style="height: 70px;position: relative">
+          <div style="position: absolute;right: 20px">
+          <form action="">
+              <div class="form-group">
+                  <label>
+                      <input type="text" class="form-control"  placeholder="请输入学校名称">
+                  </label>
+                  <input type="submit" style="height: 38px" class="btn btn-primary" value="搜索">
+             </div>
+          </form>
+              </div>
+          </div>
+        <!-- ======= Counts Section ======= -->
+    <section class="counts section-bg" style="padding: 20px;">
+      <div class="container">
+
+        <div class="row">
+
+        <div class="container theme-showcase" role="main">
+     <div class="top-box" style="overflow: hidden">
+        <div class="sort-group" style="float: left">
+            <label>年份</label>
+            <select class="top-select" id="sort-year">
+                <option value="2021"selected>2021</option>
+                <option value="2021"selected>2021</option>
+                <option value="2021"selected>2021</option>
+                <option value="2021"selected>2021</option>
+                <option value="2021"selected>2021</option>
+                <option value="2021"selected>2021</option>
+                <option value="2021"selected>2021</option>
+                <option value="2021"selected>2021</option>
+            </select>
+        </div>
+     <div>
+         <a type="button" href="#" class="btn btn-primary" style="margin-right: 10px;float: right">排名趋势</a>
+         <a type="button" href="#" class="btn btn-warning" style="margin-right: 10px;float: right">学科排名</a>
+         <a type="button" href="#" class="btn btn-danger" style="margin-right: 10px; float: right">大学排名</a>
+
+
+     </div>
+
+    </div>
+    <table style="margin: 10px" class="table table-bordered">
+        <thead>
+            <tr>
+                <th>排序</th>
+                <th>学校</th>
+                <th>国家</th>
+                <th>链接</th>
+                <th>评分</th>
+                <th>时间</th>
+            </tr>
+        </thead>
+        <tbody>
+                {% for q in qs %}
+                 <tr>
+                    <td>{{ q.sea }}</td>
+                    <td>{{ q.chinese_name }}</td>
+                     <td>{{ q.chinese_country }}</td>
+                    <td>{{ q.link }}</td>
+                    <td>{{ q.total_points }}</td>
+                    <td>{{ q.time }}</td>
+
+                </tr>
+                {% endfor %}
+
+
+
+        </tbody>
+
+    </table>
+
+</div>
+
+        </div>
+
+      </div>
+    </section><!-- End Counts Section -->
+
+      </div>
+    </section>
+{% endblock %}
