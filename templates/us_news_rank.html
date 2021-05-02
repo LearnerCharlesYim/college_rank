@@ -18,6 +18,18 @@
              </div>
           </form>
               </div>
+
+<ul class="nav nav-pills">
+  <li class="nav-item">
+    <a class="nav-link {% if us %} active{% endif %}" href="{{ url_for('us_news_rank') }}">学校排名</a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link {% if us_sub %} active{% endif %}" href="{{ url_for('us_subject') }}">学科排名</a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="#">学校排名趋势</a>
+  </li>
+</ul>
           </div>
         <!-- ======= Counts Section ======= -->
     <section class="counts section-bg" style="padding: 20px;">
@@ -30,28 +42,27 @@
         <div class="sort-group" style="float: left">
             <label>年份</label>
             <select class="top-select" id="sort-year">
-                <option value="2021"selected>2021</option>
-                <option value="2021"selected>2020</option>
-                <option value="2021"selected>2019</option>
-                <option value="2021"selected>2018</option>
-                <option value="2021"selected>2017</option>
-                <option value="2021"selected>2016</option>
+                <option value="2021"{% if t==2021 %}selected{% endif %}>2021</option>
+                <option value="2020"{% if t==2020 %}selected{% endif %}>2020</option>
+                <option value="2019"{% if t==2019 %}selected{% endif %}>2019</option>
+                <option value="2018"{% if t==2018 %}selected{% endif %}>2018</option>
+                <option value="2017"{% if t==2017 %}selected{% endif %}>2017</option>
+                <option value="2016"{% if t==2016 %}selected{% endif %}>2016</option>
+            </select>
+
+        {% if us_sub %}
+            <label>学科</label>
+                 <select class="top-select" id="sort-subject">
+                <option value="science" {% if s=='science' %}selected{% endif %}>理科</option>
+                <option value="accounting"{% if s=='accounting' %}selected{% endif %}>会计</option>
+                <option value="enginnering"{% if s=='enginnering' %}selected{% endif %}>工程学</option>
+                <option value="technology"{% if s=='technology' %}selected{% endif %}>工科</option>
 
             </select>
-                <label>学科</label>
-                <select class="top-select" id="sort-year">
-                <option value="2021"selected>会计</option>
-                <option value="2021"selected>工程学</option>
-                <option value="2021"selected>理科</option>
-                <option value="2021"selected>工科</option>
+        {% endif %}
 
-            </select>
         </div>
      <div>
-         <a type="button" href="#" class="btn btn-primary" style="margin-right: 10px;float: right">排名趋势</a>
-         <a type="button" href="#" class="btn btn-warning" style="margin-right: 10px;float: right">学科排名</a>
-         <a type="button" href="#" class="btn btn-danger" style="margin-right: 10px; float: right">大学排名</a>
-
 
      </div>
 
@@ -68,19 +79,44 @@
             </tr>
         </thead>
         <tbody>
-
+                {% if us %}
+                {% for q in us %}
                  <tr>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
+                    <td>{{ q.sea }}</td>
+                    <td>{{ q.chinese_name }}</td>
+                     <td>{{ q.chinese_country }}</td>
+                    <td><a href="{{ q.link }}">{{ q.link }}</a></td>
+                    <td>{{ q.total_points }}</td>
+                    <td>{{ q.time }}</td>
+
                 </tr>
+                {% endfor %}
+                {% endif %}
+
+               {% if us_sub %}
+                {% for q in us_sub %}
+                 <tr>
+                    <td>{{ q.sea }}</td>
+                    <td>{{ q.chinese_name }}</td>
+                     <td>{{ q.chinese_country }}</td>
+                    <td><a href="{{ q.link }}">{{ q.link }}</a></td>
+                    <td>{{ q.total_points }}</td>
+                    <td>{{ q.time }}</td>
+
+                </tr>
+                {% endfor %}
+                {% endif %}
 
         </tbody>
 
     </table>
+
+         {% if not us and not us_sub  %}
+
+             <h4 style="margin-left: 10px">暂无结果</h4>
+
+        {% endif %}
+
 
 </div>
 
@@ -91,4 +127,75 @@
 
       </div>
     </section>
+
+
 {% endblock %}
+
+    {% block script %}
+    <script>
+
+    var zlparam = {
+    setParam: function (href,key,value) {
+        // 重新加载整个页面
+        var isReplaced = false;
+        var urlArray = href.split('?');
+        if(urlArray.length > 1){
+            var queryArray = urlArray[1].split('&');
+            for(var i=0; i < queryArray.length; i++){
+                var paramsArray = queryArray[i].split('=');
+                if(paramsArray[0] == key){
+                    paramsArray[1] = value;
+                    queryArray[i] = paramsArray.join('=');
+                    isReplaced = true;
+                    break;
+                }
+            }
+
+            if(!isReplaced){
+                var params = {};
+                params[key] = value;
+                if(urlArray.length > 1){
+                    href = href + '&' + $.param(params);
+                }else{
+                    href = href + '?' + $.param(params);
+                }
+            }else{
+                var params = queryArray.join('&');
+                urlArray[1] = params;
+                href = urlArray.join('?');
+            }
+        }else{
+            var param = {};
+            param[key] = value;
+            if(urlArray.length > 1){
+                href = href + '&' + $.param(param);
+            }else{
+                href = href + '?' + $.param(param);
+            }
+        }
+        return href;
+    }
+};
+   // year排序
+    $(function () {
+    $('#sort-year').change(function (event) {
+       var value = $(this).val();
+       var newHref = zlparam.setParam(window.location.href,'t',value);
+       var reg = /page=\d+/;
+       var page = newHref.match(reg);
+       newHref = newHref.replace(page,'');
+       window.location = newHref;
+   });
+});
+   $(function () {
+    $('#sort-subject').change(function (event) {
+       var value = $(this).val();
+       var newHref = zlparam.setParam(window.location.href,'s',value);
+       var reg = /page=\d+/;
+       var page = newHref.match(reg);
+       newHref = newHref.replace(page,'');
+       window.location = newHref;
+   });
+});
+    </script>
+    {% endblock %}
