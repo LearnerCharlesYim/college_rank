@@ -66,7 +66,7 @@
 
     <div class="container">
       <div class="copyright">
-        &copy; Copyright <strong><span>Mamba</span></strong>. All Rights Reserved
+        &copy; Copyright <strong><span>世界大学排名系统</span></strong>. All Rights Reserved
       </div>
 
     </div>
@@ -87,7 +87,9 @@
   <script src="{{ url_for('static',filename='/assets/vendor/aos/aos.js') }}"></script>
   <!-- Template Main JS File -->
   <script src="{{ url_for('static',filename='/assets/js/main.js') }}"></script>
+    {% block script %}
 
+    {% endblock %}
 </body>
 
 </html>
