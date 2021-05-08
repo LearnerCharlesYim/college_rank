@@ -29,6 +29,9 @@
   <li class="nav-item">
     <a class="nav-link" href="{{ url_for('us_trend') }}">学校排名趋势</a>
   </li>
+<li class="nav-item">
+    <a class="nav-link {% if us_map %} active{% endif %}" href="{{ url_for('us_news_qs') }}">大学分布图</a>
+  </li>
 </ul>
           </div>
         <!-- ======= Counts Section ======= -->
@@ -72,8 +75,8 @@
             <tr>
                 <th>排序</th>
                 <th>学校</th>
+                <th>英文名</th>
                 <th>国家</th>
-                <th>链接</th>
                 <th>评分</th>
                 <th>时间</th>
             </tr>
@@ -83,9 +86,10 @@
                 {% for q in us %}
                  <tr>
                     <td>{{ q.sea }}</td>
-                    <td>{{ q.chinese_name }}</td>
+                   <td><a href="{{ q.link }}">{{ q.chinese_name }}</a></td>
+                     <td>{{ q.name }}</td>
                      <td>{{ q.chinese_country }}</td>
-                    <td><a href="{{ q.link }}">{{ q.link }}</a></td>
+
                     <td>{{ q.total_points }}</td>
                     <td>{{ q.time }}</td>
 
@@ -97,9 +101,10 @@
                 {% for q in us_sub %}
                  <tr>
                     <td>{{ q.sea }}</td>
-                    <td>{{ q.chinese_name }}</td>
+                    <td><a href="{{ q.link }}">{{ q.chinese_name }}</a></td>
+                     <td>{{ q.name }}</td>
                      <td>{{ q.chinese_country }}</td>
-                    <td><a href="{{ q.link }}">{{ q.link }}</a></td>
+
                     <td>{{ q.total_points }}</td>
                     <td>{{ q.time }}</td>
 

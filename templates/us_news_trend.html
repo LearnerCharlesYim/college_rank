@@ -29,6 +29,9 @@
   <li class="nav-item">
     <a class="nav-link active" href={{ url_for('us_trend') }}>学校排名趋势</a>
   </li>
+    <li class="nav-item">
+    <a class="nav-link {% if us_map %} active{% endif %}" href="{{ url_for('us_news_qs') }}">大学分布图</a>
+  </li>
 </ul>
           </div>
         <!-- ======= Counts Section ======= -->

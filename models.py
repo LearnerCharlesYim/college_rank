@@ -1,7 +1,3 @@
-# -*- coding:utf-8 -*-
-# @Time   :2021/5/1 23:02
-# @Author :CharlesYim
-# @File   :models.py
 from exts import db
 
 

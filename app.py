@@ -19,8 +19,8 @@ app.config['SQLALCHEMY_DATABASE_URI'] = DB_URI
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db.init_app(app)
-# with app.app_context():
-#     db.create_all()
+with app.app_context():
+    db.create_all()
 
 @app.route('/')
 def index():
@@ -298,7 +298,7 @@ def the_trend():
         data1.append(item[0])
     data2 = set(data1)
     colleges = list(data2)
-    result = None
+
     c = request.args.get('college',type=str,default='')
 
     return render_template('the_trend.html',colleges=colleges,name=c)
@@ -321,7 +321,6 @@ def us_trend():
         data1.append(item[0])
     data2 = set(data1)
     colleges = list(data2)
-    result = None
     c = request.args.get('college',type=str,default='')
 
     return render_template('us_news_trend.html',colleges=colleges,name=c)
@@ -344,7 +343,6 @@ def arwu_trend():
         data1.append(item[0])
     data2 = set(data1)
     colleges = list(data2)
-    result = None
     c = request.args.get('college',type=str,default='')
 
     return render_template('arwu_trend.html',colleges=colleges,name=c)
@@ -367,8 +365,80 @@ def search():
     else:
         return render_template('search.html', massage='暂无学校信息')
 
+@app.route('/qs/map/')
+def map_qs():
+    return render_template('qs_map.html',qs_map='qs_map')
+
+@app.route('/the/map/')
+def map_the():
+    return render_template('the_map.html',the_map='the_map')
+
+@app.route('/us_news/map/')
+def us_news_qs():
+    return render_template('us_news_map.html',us_map='us_map')
+
+@app.route('/arwu/map/')
+def map_arwu():
+    return render_template('arwu_map.html',arwu_map='arwu_map')
 
 
+from pyecharts import options as opts
+from pyecharts.charts import Map
 
-if __name__ == '__main__':
-    app.run()
+def map_base(colleges_list):
+
+    c = (
+        Map()
+        .add("university", colleges_list, maptype="world")
+        .set_series_opts(label_opts=opts.LabelOpts(is_show=False))
+        .set_global_opts(
+            title_opts=opts.TitleOpts(title="大学分布图"),
+            visualmap_opts=opts.VisualMapOpts(max_=200),
+        )
+
+    )
+    return c
+
+@app.route('/get_map/<name>')
+def get_map(name):
+    colleges = None
+    if name == 'qs':
+        colleges = db.session.query(Qs_rank.country,Qs_rank.name).order_by(Qs_rank.country).all()
+    elif name == 'the':
+        colleges = db.session.query(The_rank.country,The_rank.name).order_by(The_rank.country).all()
+    elif name == 'us_news':
+        colleges = db.session.query(Us_rank.country,Us_rank.name).order_by(Us_rank.country).all()
+    elif name == 'arwu':
+        colleges = db.session.query(Arwu_rank.country,Arwu_rank.name).order_by(Arwu_rank.country).all()
+
+
+    info = []
+    dict_u = {}
+    for item in colleges:
+        if dict_u == {}:
+            dict_u[item[0]] = []
+            dict_u[item[0]].append(item[1])
+        elif item[0] in dict_u.keys():
+            dict_u[item[0]].append(item[1])
+        else:
+            info.append(dict_u)
+            dict_u = {}
+            dict_u[item[0]] = []
+            dict_u[item[0]].append(item[1])
+    info.append(dict_u)
+
+    colleges_list = []
+    for dict in info:
+        for k,v in dict.items():
+            college_list = []
+            k = 'China' if k == 'China (Mainland)' else k
+            k = 'United States' if k == 'USA' else k
+            k = 'United Kingdom' if k == 'UK' else k
+
+            college_list.append(k)
+            college_list.append(len(set(v)))
+            print(college_list)
+            colleges_list.append(college_list)
+
+    c = map_base(colleges_list)
+    return c.dump_options_with_quotes()
